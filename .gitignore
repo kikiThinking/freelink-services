@@ -1,0 +1,7 @@
+*.exe
+*.xls
+*.xlsx
+*.txt
+*.xml
+/temp
+/.idea
