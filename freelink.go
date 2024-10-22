@@ -12,6 +12,8 @@ package main
 import (
 	"fmt"
 	"freelink/DB"
+	"freelink/middlewares"
+	"freelink/routes"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -22,25 +24,35 @@ import (
 )
 
 var (
-	db         *gorm.DB
-	err        error
-	dbusername string
-	dbpassword string
-	dbhost     string
-	dbport     string
-	dbname     string
-	dbcharset  string
+	db                  *gorm.DB
+	err                 error
+	dbusername          string
+	dbpassword          string
+	dbhost              string
+	dbport              string
+	dbname              string
+	dbcharset           string
+	tokenexpirationtime string
 )
 
 func init() {
 
 	func() {
+		for key, value := range map[string]string{"DB_HOST": "192.168.31.99", "DB_PORT": "3306", "DB_USERNAME": "root", "DB_PASSWORD": "Qaqaqa00.0", "DB_CHARSET": "utf8mb4", "DB_NAME": "freelink", "API_SECRET": "1qaz@wsx", "TOKEN_EXPIRATION_TIME": "14400"} {
+			if err := os.Setenv(key, value); err != nil {
+				fmt.Println(err.Error())
+				return
+			}
+		}
+
 		dbhost = os.Getenv("DB_HOST")
 		dbport = os.Getenv("DB_PORT")
 		dbname = os.Getenv("DB_NAME")
+		dbname = os.Getenv("API_SECRET")
 		dbcharset = os.Getenv("DB_CHARSET")
 		dbusername = os.Getenv("DB_USERNAME")
 		dbpassword = os.Getenv("DB_PASSWORD")
+		tokenexpirationtime = os.Getenv("TOKEN_EXPIRATION_TIME")
 
 		fmt.Println(dbhost, dbport, dbname, dbusername, dbpassword, dbcharset)
 
@@ -88,6 +100,9 @@ func main() {
 			ctx.Next()
 		}
 	})
+
+	ginservices.Use(middlewares.JwtAuthMiddleware())
+	routes.Login(ginservices, db)
 
 	fmt.Println("Gin service release port 80")
 	if err = ginservices.Run(":80"); err != nil {

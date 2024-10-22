@@ -3,6 +3,7 @@ package routes
 import (
 	"freelink/DB"
 	"freelink/encryption"
+	"freelink/token"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
@@ -37,7 +38,11 @@ func Login(engine *gin.Engine, db *gorm.DB) {
 			})
 			return
 		}
+
+		if usertoken, err := token.Generatetoken(databaseuser.Username); err != nil {
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+		} else {
+			ctx.JSON(http.StatusOK, gin.H{"token": usertoken})
+		}
 	})
 }
-
-func Verify(engine *gin.Engine) {}

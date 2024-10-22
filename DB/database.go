@@ -6,13 +6,14 @@ import (
 
 type User struct {
 	gorm.Model
-	Username     string `gorm:"unique;not null"`
-	Password     string `gorm:"type:varchar(255);not null"`
-	Tel          string `gorm:"type:char(11)"`
-	Salt         string `gorm:"type:varchar(255)"`
-	Email        string `gorm:"type:varchar(30)"`
-	LoginToken   string `gorm:"type:varchar(255)"`
-	RefreshToken string `gorm:"type:varchar(255)"`
+	Username string `gorm:"unique;not null"`
+	Password string `gorm:"type:varchar(255);not null"`
+	Tel      string `gorm:"type:char(11)"`
+	Salt     string `gorm:"type:varchar(255)"`
+	Email    string `gorm:"type:varchar(30)"`
+
+	TokenID uint64
+	Token   Token `gorm:"foreignkey:TokenID"`
 
 	StorageID uint    // 外键字段
 	Storage   Storage `gorm:"foreignkey:StorageID"`
@@ -29,6 +30,11 @@ type Storage struct {
 
 	RootFolderID uint   // 外键字段
 	RootFolder   Folder `gorm:"foreignkey:RootFolderID"` // 表示根目录
+}
+
+type Token struct {
+	gorm.Model
+	Tokenstr string `gorm:"type:varchar(255)"`
 }
 
 type Limit struct {
