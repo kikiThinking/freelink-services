@@ -32,6 +32,7 @@ var (
 	dbport              string
 	dbname              string
 	dbcharset           string
+	dbsecret            string
 	tokenexpirationtime string
 )
 
@@ -48,7 +49,7 @@ func init() {
 		dbhost = os.Getenv("DB_HOST")
 		dbport = os.Getenv("DB_PORT")
 		dbname = os.Getenv("DB_NAME")
-		dbname = os.Getenv("API_SECRET")
+		dbsecret = os.Getenv("API_SECRET")
 		dbcharset = os.Getenv("DB_CHARSET")
 		dbusername = os.Getenv("DB_USERNAME")
 		dbpassword = os.Getenv("DB_PASSWORD")
@@ -56,8 +57,8 @@ func init() {
 
 		fmt.Println(dbhost, dbport, dbname, dbusername, dbpassword, dbcharset)
 
-		if dbusername == "" || dbpassword == "" || dbhost == "" || dbport == "" || dbname == "" || dbcharset == "" {
-			panic("DB_USERNAME, DB_PASSWORD, DB_NAME, DB_CHARSET, DB_HOST, DB_PORT")
+		if dbusername == "" || dbpassword == "" || dbhost == "" || dbport == "" || dbname == "" || dbcharset == "" || tokenexpirationtime == "" || dbsecret == "" {
+			panic("DB_USERNAME, DB_PASSWORD, DB_NAME, DB_CHARSET, DB_HOST, DB_PORT, TOKEN_EXPIRATION_TIME, API_SECRET")
 		}
 	}()
 

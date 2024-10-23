@@ -46,3 +46,5 @@ func Login(engine *gin.Engine, db *gorm.DB) {
 		}
 	})
 }
+
+func Register(engine *gin.Engine, db *gorm.DB) {}
